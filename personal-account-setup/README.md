@@ -1,6 +1,6 @@
 # Project Setup Guide for Personal Accounts
 
-This guide provides step-by-step instructions for setting up a project repository using your personal GitHub account.
+This guide provides step-by-step instructions for setting up a production-ready project repository using your personal GitHub account.
 
 ## Step 1: Create the Project Repository
 
@@ -9,13 +9,17 @@ This guide provides step-by-step instructions for setting up a project repositor
 1. Log in to your GitHub account.
 2. Click the **+** icon in the top-right corner and select **New repository**.
 3. Provide the following details:
-   - **Repository Name**: Enter a unique and descriptive name.
-   - **Description** (optional): Add a brief summary of the project.
-   - **Visibility**: Choose between **Public** or **Private** based on your preference.
-4. (Optional) Initialize the repository with:
-   - A **README file**.
-   - A **.gitignore file** (select a template suitable for your project).
-   - A **license** (if applicable).
+
+- **Repository Name**: Use a unique, descriptive, and meaningful name.
+- **Description**: Add a concise summary of the project.
+- **Visibility**: Choose **Private** for production-level projects to restrict access.
+
+4. Initialize the repository with:
+
+- A **README file**: Include a project overview and setup instructions.
+- A **.gitignore file**: Select a template suitable for your tech stack (e.g., Node.js, Python).
+- A **license**: Choose an appropriate license for your project.
+
 5. Click **Create repository** to complete the process.
 
 ### 1.2. Set Up the Repository Locally
@@ -40,15 +44,17 @@ Replace `<repository-name>` with your repository's name and `<repository-url>` w
 
 1. Navigate to your repository page on GitHub.
 2. Click the **Code** button and copy the repository URL (HTTPS or SSH).
-3. Open a terminal and run the following command:
-   ```bash
-   git clone <repository-url>
-   ```
-   Replace `<repository-url>` with the URL you copied.
+3. Open a terminal and run:
+
+```bash
+git clone <repository-url>
+```
+
+Replace `<repository-url>` with the URL you copied.
 
 #### Option 3: Push an Existing Repository
 
-If you already have a local repository, connect it to GitHub using the following commands:
+If you already have a local repository, connect it to GitHub using:
 
 ```bash
 git remote add origin <repository-url>
@@ -76,144 +82,166 @@ git remote -v
 
 Ensure the output displays the correct repository URL.
 
-## Step 2: Create Teams
+## Step 2: Configure Teams and Access Control
 
-### 2.1. Set Access for Individuals
+### 2.1. Add Collaborators
 
-- Go to **Repo** -> **Settings** -> **Collaborators**
-- Click **Add people**
-- Seach people by username, full name, or email
-- Add the user and assign the appropriate access level
+1. Go to **Repo** -> **Settings** -> **Collaborators and teams**.
+2. Click **Add people**.
+3. Search for users by username, full name, or email.
+4. Add the user and assign the appropriate access level (e.g., Read, Write, Admin).
+
+### 2.2. Use GitHub Teams (Optional)
+
+For larger teams, create GitHub Teams to manage access:
+
+1. Navigate to your organization -> **Teams**.
+2. Create a new team and assign members.
+3. Grant the team access to the repository with the desired permission level.
 
 ## Step 3: Set Up Project Management Tools
 
 ### 3.1. Create a GitHub Project (Kanban Board)
 
-- Go to **Projects**
-- Click **New Project**
-- Choose **Board** (Kanban-style) or **Table**
-- Write **Project name** and Click **Create Project** to create the project
+1. Go to **Projects**.
+2. Click **New Project**.
+3. Choose **Board** (Kanban-style) or **Table**.
+4. Enter a **Project name** and click **Create Project**.
 
 ### 3.2. Define Workflow Columns
 
-- Customize columns to match your workflow:
-  - Examples: To Do, In Progress, Testing, Review, To Deploy, In Production, Done.
+Customize columns to match your production workflow:
 
-### 3.3. Create & Link Issues to Your Project Board
+| **Column Name**   | **Description**                                                    |
+| ----------------- | ------------------------------------------------------------------ |
+| **Backlog**       | Ideas and suggestions not yet prioritized.                         |
+| **To Do**         | Well-defined tasks ready for development.                          |
+| **In Progress**   | Tasks actively being worked on.                                    |
+| **Testing**       | Tasks undergoing testing (unit, integration, QA).                  |
+| **In Review**     | Completed work awaiting peer review or stakeholder feedback.       |
+| **To Deploy**     | Work that has passed review and testing, queued for deployment.    |
+| **In Production** | Features or fixes deployed and live in the production environment. |
+| **Blocked**       | Tasks stalled due to dependencies or issues.                       |
+| **Done**          | Fully completed work requiring no further action.                  |
 
-#### Option 1: From the Project Board
+### 3.3. Automate Workflows
 
-- Go to your GitHub Project.
-- In your Kanban board view, pick the column you want (e.g., To Do).
-- Click **+ Add item** at the bottom of the column.
-  - Type to search for an existing issue (#issue-number or title), or
-  - Type # to select repository and Select a repository for you issue
-  - Then Click **+ Create new issue**
-  - In the popup:
-    - Select the **Repository**
-    - Click **Blank issue**
-- If creating a new issue, a modal will open — fill in the title/description, and GitHub will:
-  - Create the issue in your repo.
-  - Link it automatically to your project.
-  - Place it in the selected column.
+1. In your project, click the **Settings** gear icon.
+2. Go to the **Workflows** tab and set rules like:
 
-#### Option 2: From an Issue
+- "When issue is added → move to To Do".
+- "When pull request is opened → move to In Review".
+- "When issue is closed → move to Done".
 
-- Go to **Issues** and Click **New Issue**
-- On the right sidebar, scroll to the **Projects** section.
-- Select your Kanban project.
-- Add a title, and decription
-- The issue is now added to your project and visible in the default column (e.g., To Do).
-- Then Click **Create**
+## Step 4: Set Up GitHub Actions and Branch Protection Rules
 
-### Optional: Set Up Authomation
+### 4.1. Configure GitHub Actions
 
-- Want issues to automatically move based on status? Here's how:
-  - In your project, click the **Settings** gear(... three dot) icon (top-right).
-  - Go to the **Workflows** tab.
-  - Set rules like:
-    - "When issue is added → move to To Do"
-    - "When pull request is opened → move to In Review"
-    - "When issue is closed → move to Done"
-
-## Step 4: Setup GitHub Actions and Branch Protection Rules
-
-Setup GitHub Actions and Branch Protection Rules before working on the project
-
-### 4.1 Set Up GitHub Actions
-
-#### 4.1.1. Create GitHub Actions Workflow File
-
-- In your project root, create:
+1. Create a workflow file:
 
 ```bash
-.github/workflows/ci.yml
+mkdir -p .github/workflows
+touch .github/workflows/ci.yml
 ```
 
-- Add a basic configuration:
+2. Add a production-ready CI/CD configuration:
 
-Minimal `ci.yml` for f Fresh Repo
-
-```
-name: CI
+```yaml
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
 
 jobs:
-  placeholder-check:
-    name: Initial CI Scaffold
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup message
-        run: echo "CI is set up. Add real steps once project code is added."
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy application
+        run: echo "Deploying to production..."
 ```
 
-#### 4.1.2. Commit & Push Workflow
+3. Commit and push the workflow:
 
 ```bash
 git add .github/workflows/ci.yml
-git commit -m "Add GitHub Actions CI workflow"
+git commit -m "Add CI/CD pipeline"
 git push
 ```
 
-### 4.2. Configure Branch Protection Rules
+### 4.2. Set Branch Protection Rules
 
-- Navigate to the repository:
-  - Go to **Repositories** -> Select your repository.
-  - Click on **Settings** -> **Branches**.
-  - Under the "Code and automation" section, click **Add branch ruleset**.
+1. Go to **Settings** -> **Branches** -> **Add branch ruleset**.
+2. Configure the following rules:
 
-##### Ruleset Configuration
+- **Require a pull request before merging**.
+- **Require status checks to pass before merging**.
+- **Require branches to be up to date before merging**.
+- **Require linear history**.
+- **Restrict who can push to matching branches**.
 
-- **Ruleset Name**: Protect Main
-- **Enforcement Status**: Active
-- **Bypass List**: Leave empty.
-- **Target Branches**:
-  - Click **Add target** -> **Include by pattern**.
-  - Enter branch patterns (e.g., `main`, `dev`).
+3. Save the ruleset.
 
-##### Enable the Following Rules:
+## Step 5: Start Development
 
-- ✅ **Require a pull request before merging**: Enforces code reviews and prevents direct commits.
-- ✅ **Required approvals**: Minimum number: 1 (set to 2 for stricter reviews).
-- ✅ **Dismiss stale pull request approvals when new commits are pushed**: Ensures reviews are up-to-date.
-- ✅ **Require status checks to pass**: Add CI checks (e.g., build, test).
-  - Ensure CI tools (e.g., GitHub Actions) are configured to list available checks.
-- ✅ **Require branches to be up to date before merging**: Enforces rebasing or merging the latest `main` branch.
-- ✅ **Require linear history**: Prevents merge commits, maintaining a clean commit history.
-- ✅ **Restrict who can push to matching branches**: Limit to trusted teams (e.g., DevOps, Admin).
-- ✅ **Do not allow bypassing the rules**: Prevents admins or bots from bypassing protections.
+### 5.1. Create a Feature Branch
 
-##### Optional:
+```bash
+git checkout -b feat/<feature-name>
+```
 
-- 🔒 **Include administrators**: Applies rules to organization/repository admins.
+Replace `<feature-name>` with a descriptive name for the feature.
 
-- 💾 Save the ruleset by clicking **Create** or **Save ruleset**.
+### 5.2. Commit and Push Changes
+
+```bash
+git add .
+git commit -m "feat: add <feature-description>"
+git push origin feat/<feature-name>
+```
+
+### 5.3. Create a Pull Request
+
+1. Navigate to your repository on GitHub.
+2. Click **Compare & pull request**.
+3. Provide a clear title and description.
+4. Assign reviewers and click **Create pull request**.
+
+### 5.4. Merge and Delete the Branch
+
+1. After approval, merge the PR.
+2. Delete the branch locally and remotely:
+
+```bash
+git branch -d feat/<feature-name>
+git push origin --delete feat/<feature-name>
+```
